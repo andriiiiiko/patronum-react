@@ -16,14 +16,14 @@ const Header = () => {
                 <li>
                     <a href="/login">
                         <button className='button'>
-                            Login
+                            LOG IN
                         </button>
                     </a>
                 </li>
                 <li>
                     <a href="/register">
                         <button className='button'>
-                            Register
+                            SIGN UP
                         </button>
                     </a>
                 </li>

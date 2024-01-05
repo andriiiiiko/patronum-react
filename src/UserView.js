@@ -1,15 +1,11 @@
-// ViewAllPage.js
 import React, {useCallback, useEffect, useState} from 'react';
+import Notiflix from 'notiflix'
 import axios from 'axios';
 import { BsEye } from "react-icons/bs";
-// import dataArr from './test.json'
-
 
 const UserView = () => {
     const [data, setData] = useState([]);
-    const [error, setError] = useState('');
-    const [selectedOption, setSelectedOption] = useState(null);
-    // const [filteredData, setFilteredData] = useState([]);
+    const [selectedOption, setSelectedOption] = useState('option1');
     const [originalUrl, setOriginalUrl] = useState('');
     const [description, setDescription] = useState('');
     const fetchData = useCallback(async () => {
@@ -26,35 +22,44 @@ const UserView = () => {
 
             if (error === 'OK') {
                 setData(userUrls);
-                // setFilteredData(userUrls);
+                Notiflix.Notify.success('Successful login');
+            } else if (error === 'INVALID_USER_NAME') {
+                Notiflix.Notify.failure('User name does not exist in the database');
             } else {
-                setError('Error fetching data');
+                Notiflix.Notify.failure('Error fetching data');
             }
         } catch (error) {
             console.error('Unexpected error while fetching data', error);
-            setError('Unexpected error while fetching data');
+            Notiflix.Notify.failure('Unexpected error while fetching data');
         }
     },[selectedOption]);
+
     const handleRedirectClick = async (shortUrl) => {
         try {
             const response = await axios.post('http://localhost:80/api/v1/urls/view/redirect', { shortUrl });
             const { error, originalUrl } = response.data;
 
             if (error === 'OK') {
-                window.open(originalUrl, '_blank'); // Открыть новую вкладку с оригинальным URL
+                window.open(originalUrl, '_blank');
+                Notiflix.Notify.success('Successful login');
+            } else if (error === 'INVALID_SHORT_URL') {
+                Notiflix.Notify.failure('Invalid link');
             } else {
-                setError('Error fetching redirect data');
+                Notiflix.Notify.failure('Error fetching redirect data');
             }
         } catch (error) {
             console.error('Unexpected error while fetching redirect data', error);
-            setError('Unexpected error while fetching redirect data');
+            Notiflix.Notify.failure('Unexpected error while fetching redirect data');
         }
     };
 
 
     useEffect(() => {
+        const fetchDataWrapper = async () => {
+            await fetchData();
+        };
 
-        fetchData();
+        fetchDataWrapper();
     }, [fetchData]);
 
     const handleConvert = async () => {
@@ -72,18 +77,24 @@ const UserView = () => {
             const { error, newUrl } = response.data;
 
             if (error === 'OK') {
-                // Обработка успешного создания URL-ссылки, если необходимо
+                setOriginalUrl('');
+                setDescription('');
                 console.log('URL created successfully:', newUrl);
+                Notiflix.Notify.success('Successful creation');
+            } else if (error === 'EMPTY_NEW_URL') {
+                Notiflix.Notify.failure('Empty link');
+            } else if (error === 'EXPIRED_URL') {
+                Notiflix.Notify.failure('Expired link');
             } else {
-                setError('Error creating URL');
+                Notiflix.Notify.failure('Error creating URL');
             }
         } catch (error) {
             console.error('Unexpected error while creating URL', error);
-            setError('Unexpected error while creating URL');
+            Notiflix.Notify.failure('Unexpected error while creating URL');
         }
     };
 
-    const formatExpirationDate = (expirationDate) => {
+    const formatExpirationDate1 = (expirationDate) => {
         const dateObject = new Date(expirationDate);
 
         const day = String(dateObject.getDate()).padStart(2, '0');
@@ -100,8 +111,6 @@ const UserView = () => {
 
     const handleRadioChange = (value) => {
         setSelectedOption(value);
-        // сюда при смене радио кнопки надо повесить обработку фильтра с бека
-        // запросом или как то еще
         fetchData();
     };
 
@@ -109,22 +118,25 @@ const UserView = () => {
         try {
             const authToken = localStorage.getItem('authToken');
             const headers = { Authorization: `Bearer ${authToken}` };
-
-            const response = await axios.post(`http://localhost:80/api/v1/urls/delete/${id}`, {}, { headers });
+            const response =
+                await axios.post(`http://localhost:80/api/v1/urls/delete/${id}`, {}, { headers });
 
             const { error } = response.data;
 
             if (error === 'OK') {
-                // Обработка успешного удаления ссылки, если необходимо
                 console.log('URL deleted successfully');
-                // После удаления обновите данные, вызвав fetchData()
-                fetchData();
+                Notiflix.Notify.success('Successful removal');
+                await fetchData();
+            } else if (error === 'INVALID_ID') {
+                Notiflix.Notify.failure('Invalid ID');
+            } else if (error === 'INVALID_ACCESS') {
+                Notiflix.Notify.failure('Access denied');
             } else {
-                setError('Error deleting URL');
+                Notiflix.Notify.failure('Error deleting URL');
             }
         } catch (error) {
             console.error('Unexpected error while deleting URL', error);
-            setError('Unexpected error while deleting URL');
+            Notiflix.Notify.failure('Unexpected error while deleting URL');
         }
     };
 
@@ -137,16 +149,15 @@ const UserView = () => {
             const { error } = response.data;
 
             if (error === 'OK') {
-                // Обработка успешного удаления ссылки, если необходимо
                 console.log('URL deleted successfully');
-                // После удаления обновите данные, вызвав fetchData()
+                Notiflix.Notify.success('The link is activated')
                 await fetchData();
-            } else {
-                setError('Error deleting URL');
+            } else { //дописать обработку ошибок на добавление дней
+                Notiflix.Notify.failure('Error deleting URL')
             }
         } catch (error) {
             console.error('Unexpected error while deleting URL', error);
-            setError('Unexpected error while deleting URL');
+            Notiflix.Notify.failure('Error deleting URL')
         }
     };
 
@@ -155,7 +166,6 @@ const UserView = () => {
     return (
         <div className='App-container'>
             <h1 className='Auth-title'>View All</h1>
-            {error && <p>{error}</p>}
             {isAuthToken ?
                 <>
                     <div className='Convert-block'>
@@ -218,13 +228,12 @@ const UserView = () => {
                             <div key={item.id} className='Info-all'>
                                 <div className='info-text'>
                                     <p><a href={item.originalUrl} onClick={() => handleRedirectClick(item.shortUrl)}>
-                                        {/*блокирует редирект /*/}
                                          {item.shortUrl}
                                     </a></p>
                                     <p><BsEye/> {item.visitCount}</p>
                                 </div>
                                 <div className='info-text'>
-                                    <span><a href={item.expirationDate}>{formatExpirationDate(item.expirationDate)}</a></span>
+                                    <span><a href={item.expirationDate}>{formatExpirationDate1(item.expirationDate)}</a></span>
                                 </div>
                                 <button type='button' onClick={() => handleTime(item.shortUrl)} className='button'>
                                     +30 Day
@@ -238,21 +247,6 @@ const UserView = () => {
                 </>
                 :
                 <>
-                    {/*<div className='Info-title Form-label'>*/}
-                {/*        <p>ShortUrl</p>*/}
-                {/*        <p>OriginalUrl</p>*/}
-                {/*</div>*/}
-                {/*    {data.map((item) => (*/}
-                {/*        <div key={item.id} className='Info-all'>*/}
-                {/*            <div className='info-text'>*/}
-                {/*                <p><a href={item.shortUrl}>{item.shortUrl}</a></p>*/}
-                {/*                <p><BsEye /> {item.visitCount}</p>*/}
-                {/*            </div>*/}
-                {/*            <div className='info-text'>*/}
-                {/*                <span><a href={item.originalUrl}>{item.originalUrl}</a></span>*/}
-                {/*            </div>*/}
-                {/*        </div>*/}
-                {/*    ))}*/}
                 </>
             }
         </div>

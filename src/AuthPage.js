@@ -1,12 +1,12 @@
 import React, { useState } from 'react';
+import Notiflix from 'notiflix'
 import axios from 'axios';
 import { Link, useNavigate } from 'react-router-dom';
 
 const AuthPage = () => {
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
-    const [error, setError] = useState('');
-    const [authToken, setAuthToken] = useState('');
+
     const navigate = useNavigate();
 
     const handleLogin = async () => {
@@ -16,24 +16,26 @@ const AuthPage = () => {
                 password,
             });
 
-            const { error, authToken } = response.data;
+            const { error, token } = response.data;
 
-            if (error === 'OK'  && authToken) {
-                // Вход выполнен успешно
-                console.log('Успешный вход', authToken);
-                setAuthToken(authToken);
-                localStorage.setItem('authToken', authToken);
+            if (error === 'OK'  && token) {
+                console.log('Успешный вход', token);
+                Notiflix.Notify.success('You have successfully logged in')
+                localStorage.setItem('authToken', token);
                 navigate('/userview');
             } else if (error === 'INVALID_USER_NAME') {
-                setError('Имя пользователя пустое');
-            } else if (error === 'INVALID_PASSWORD') {
-                setError('Пароль должен быть не менее 8 символов');
+                Notiflix.Notify.failure('We could not find an account with that username')
+            } else if (error === 'NAME_IS_EMPTY') {
+                Notiflix.Notify.failure('Username cannot be blank')
+            }else if (error === 'INVALID_PASSWORD') {
+                Notiflix.Notify.failure('Password must be at least 8 characters')
             }
         } catch (error) {
             console.error('Произошла неожиданная ошибка при авторизации', error.response?.data || error.message);
-            setError('Произошла неожиданная ошибка при авторизации');
+            Notiflix.Notify.failure('An unexpected error has occurred')
         }
     };
+
 
     return (
         <div className='App-container'>
@@ -65,9 +67,8 @@ const AuthPage = () => {
                     Login
                 </button>
             </form>
-            {error && <p>{error}</p>}
             <p className='Auth-text'>
-                Нет аккаунта? <Link to="/register">Зарегистрируйтесь</Link>.
+                Don't have an account? <Link to="/register">Sign up</Link>.
             </p>
         </div>
     );

@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import Notiflix from 'notiflix'
 import axios from 'axios';
 import { Link, useNavigate } from 'react-router-dom';
 
@@ -6,7 +7,6 @@ const RegistrationPage = () => {
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
     const [confirmPassword, setConfirmPassword] = useState('');
-    const [error, setError] = useState('');
     const navigate = useNavigate();
 
     const handleRegistration = async () => {
@@ -21,24 +21,24 @@ const RegistrationPage = () => {
 
             if (error === 'OK') {
                 console.log('Успешная регистрация');
+                Notiflix.Notify.success('You have been successfully registered')
                 navigate('/login');
             } else if (error === 'USER_ALREADY_EXISTS') {
-                setError('Такой пользователь уже зарегистрирован');
+                Notiflix.Notify.failure('This user is already registered')
             } else if (error === 'INVALID_USERNAME') {
-                setError('Имя пользователя пустое');
+                Notiflix.Notify.failure('Username cannot be blank')
             } else if (error === 'INVALID_PASSWORD') {
-                setError('Пароль должен быть не менее 8 символов');
+                Notiflix.Notify.failure('Password must be at least 8 characters and include an uppercase letter and a digit')
             } else if (error === 'INVALID_CONFIRM_PASSWORD') {
-                setError('Ваши пароли не совпадают');
+                Notiflix.Notify.failure('Password and Confirm password does not match')
             } else {
-                setError('Произошла ошибка при регистрации');
                 console.error('Ошибка регистрации:', error);
+                Notiflix.Notify.failure('Something went wrong. Please try again')
             }
         } catch (error) {
             console.error('Произошла неожиданная ошибка при регистрации', error.response?.data || error.message);
-            setError('Произошла неожиданная ошибка при регистрации');
-        }
-
+            Notiflix.Notify.failure('An unexpected error occurred')
+            }
     };
 
     return (
@@ -82,9 +82,8 @@ const RegistrationPage = () => {
                     Register
                 </button>
             </form>
-            {error && <p>{error}</p>}
             <p className='Auth-text'>
-                Уже есть аккаунт? <Link to="/login">Войдите</Link>.
+                Already have an account? <Link to="/login">Log in</Link>.
             </p>
         </div>
     );

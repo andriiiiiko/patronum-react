@@ -1,10 +1,11 @@
 import React, { useEffect, useState } from 'react';
+import Notiflix from 'notiflix'
 import axios from 'axios';
 import { BsEye } from "react-icons/bs";
 
 const ViewAllPage = () => {
     const [data, setData] = useState([]);
-    const [error, setError] = useState('');
+    // const [error, setError] = useState('');
 
     const handleRedirectClick = async (shortUrl) => {
         try {
@@ -13,12 +14,15 @@ const ViewAllPage = () => {
 
             if (error === 'OK') {
                 window.open(originalUrl, '_blank'); // Открыть новую вкладку с оригинальным URL
+                Notiflix.Notify.success('Успешный вход')
             } else {
-                setError('Error fetching redirect data');
+                // setError('Error fetching redirect data');
+                Notiflix.Notify.failure('Error fetching redirect data')
             }
         } catch (error) {
             console.error('Unexpected error while fetching redirect data', error);
-            setError('Unexpected error while fetching redirect data');
+            // setError('Unexpected error while fetching redirect data');
+            Notiflix.Notify.failure('Unexpected error while fetching redirect data')
         }
     };
 
@@ -45,11 +49,13 @@ const ViewAllPage = () => {
                 if (error === 'OK') {
                     setData(urls);
                 } else {
-                    setError('Error fetching data');
+                    // setError('Error fetching data');
+                    Notiflix.Notify.failure('Error fetching data')
                 }
             } catch (error) {
                 console.error('Unexpected error while fetching data', error);
-                setError('Unexpected error while fetching data');
+                // setError('Unexpected error while fetching data');
+                Notiflix.Notify.failure('Unexpected error while fetching data')
             }
         };
 
@@ -59,8 +65,6 @@ const ViewAllPage = () => {
     return (
         <div className='App-container'>
             <h1 className='Auth-title'>View All</h1>
-            {error && <p>{error}</p>}
-
             <div className='Info-title Form-label'>
                 <p>ShortUrl</p>
                 <p>Time</p>
@@ -70,7 +74,6 @@ const ViewAllPage = () => {
                     <div className='info-text'>
                         <p>
                             <a href={item.originalUrl} onClick={() => handleRedirectClick(item.shortUrl)}>
-                                {/*//блокирует редирект */}
                                 {item.shortUrl}
                             </a>
                         </p>

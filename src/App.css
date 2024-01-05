@@ -224,9 +224,13 @@ button {
 .Info-title {
   display: flex;
   flex-direction: row;
-  gap: 150px;
+  gap: 220px;
   margin-bottom: 10px;
   justify-content: space-between;
+}
+
+.Info-title p:last-child {
+  margin-right: 270px; /* Используйте отрицательное значение, чтобы сдвинуть влево */
 }
 
 .Info-all {
