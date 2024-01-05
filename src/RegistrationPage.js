@@ -11,7 +11,7 @@ const RegistrationPage = () => {
 
     const handleRegistration = async () => {
         try {
-            const response = await axios.post('http://localhost:80/api/v1/auth/register', {
+            const response = await axios.post('http://localhost:9999/api/v1/auth/register', {
                 username,
                 password,
                 confirmPassword,
@@ -38,7 +38,7 @@ const RegistrationPage = () => {
         } catch (error) {
             console.error('Произошла неожиданная ошибка при регистрации', error.response?.data || error.message);
             Notiflix.Notify.failure('An unexpected error occurred')
-            }
+        }
     };
 
     return (

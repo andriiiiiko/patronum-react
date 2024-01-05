@@ -11,14 +11,14 @@ const AuthPage = () => {
 
     const handleLogin = async () => {
         try {
-            const response = await axios.post('http://localhost:80/api/v1/auth/login', {
+            const response = await axios.post('http://localhost:9999/api/v1/auth/login', {
                 username,
                 password,
             });
 
             const { error, token } = response.data;
 
-            if (error === 'OK'  && token) {
+            if (error === 'OK' && token) {
                 console.log('Успешный вход', token);
                 Notiflix.Notify.success('You have successfully logged in')
                 localStorage.setItem('authToken', token);
@@ -27,7 +27,7 @@ const AuthPage = () => {
                 Notiflix.Notify.failure('We could not find an account with that username')
             } else if (error === 'NAME_IS_EMPTY') {
                 Notiflix.Notify.failure('Username cannot be blank')
-            }else if (error === 'INVALID_PASSWORD') {
+            } else if (error === 'INVALID_PASSWORD') {
                 Notiflix.Notify.failure('Password must be at least 8 characters')
             }
         } catch (error) {

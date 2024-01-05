@@ -9,7 +9,7 @@ const ViewAllPage = () => {
 
     const handleRedirectClick = async (shortUrl) => {
         try {
-            const response = await axios.post('http://localhost:80/api/v1/urls/view/redirect', { shortUrl });
+            const response = await axios.post('http://localhost:9999/api/v1/urls/view/redirect', { shortUrl });
             const { error, originalUrl } = response.data;
 
             if (error === 'OK') {
@@ -43,7 +43,7 @@ const ViewAllPage = () => {
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const response = await axios.get('http://localhost:80/api/v1/urls/view/all');
+                const response = await axios.get('http://localhost:9999/api/v1/urls/view/all');
                 const { error, urls } = response.data;
 
                 if (error === 'OK') {
@@ -77,7 +77,7 @@ const ViewAllPage = () => {
                                 {item.shortUrl}
                             </a>
                         </p>
-                        <p><BsEye/> {item.visitCount}</p>
+                        <p><BsEye /> {item.visitCount}</p>
                     </div>
                     <div className='info-text'>
                         <span><a href={item.expirationDate}>{formatExpirationDate(item.expirationDate)}</a></span>

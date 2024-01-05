@@ -1,4 +1,4 @@
-import React, {useCallback, useEffect, useState} from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import Notiflix from 'notiflix'
 import axios from 'axios';
 import { BsEye } from "react-icons/bs";
@@ -13,11 +13,11 @@ const UserView = () => {
         try {
             const authToken = localStorage.getItem('authToken');
             const headers = { Authorization: `Bearer ${authToken}` };
-            let url = 'http://localhost:80/api/v1/urls/view/all/user';
+            let url = 'http://localhost:9999/api/v1/urls/view/all/user';
             if (selectedOption === 'option2') {
-                url = 'http://localhost:80/api/v1/urls/view/all/user/active';
+                url = 'http://localhost:9999/api/v1/urls/view/all/user/active';
             }
-            const response = await axios.get(url, {headers});
+            const response = await axios.get(url, { headers });
             const { error, userUrls } = response.data;
 
             if (error === 'OK') {
@@ -31,11 +31,11 @@ const UserView = () => {
             console.error('Unexpected error while fetching data', error);
             Notiflix.Notify.failure('Unexpected error while fetching data');
         }
-    },[selectedOption]);
+    }, [selectedOption]);
 
     const handleRedirectClick = async (shortUrl) => {
         try {
-            const response = await axios.post('http://localhost:80/api/v1/urls/view/redirect', { shortUrl });
+            const response = await axios.post('http://localhost:9999/api/v1/urls/view/redirect', { shortUrl });
             const { error, originalUrl } = response.data;
 
             if (error === 'OK') {
@@ -71,7 +71,7 @@ const UserView = () => {
                 description,
             };
 
-            const response = await axios.post('http://localhost:80/api/v1/urls/create', requestData, { headers });
+            const response = await axios.post('http://localhost:9999/api/v1/urls/create', requestData, { headers });
 
             const { error, newUrl } = response.data;
 
@@ -118,7 +118,7 @@ const UserView = () => {
             const authToken = localStorage.getItem('authToken');
             const headers = { Authorization: `Bearer ${authToken}` };
             const response =
-                await axios.post(`http://localhost:80/api/v1/urls/delete/${id}`, {}, { headers });
+                await axios.post(`http://localhost:9999/api/v1/urls/delete/${id}`, {}, { headers });
 
             const { error } = response.data;
 
@@ -144,7 +144,7 @@ const UserView = () => {
             const authToken = localStorage.getItem('authToken');
             const headers = { Authorization: `Bearer ${authToken}` };
 
-            const response =  await axios.post('http://localhost:80/api/v1/extension', { shortUrl }, { headers });
+            const response = await axios.post('http://localhost:9999/api/v1/extension', { shortUrl }, { headers });
             const { error } = response.data;
 
             if (error === 'OK') {
@@ -227,9 +227,9 @@ const UserView = () => {
                             <div key={item.id} className='Info-all'>
                                 <div className='info-text'>
                                     <p><a href={item.originalUrl} onClick={() => handleRedirectClick(item.shortUrl)}>
-                                         {item.shortUrl}
+                                        {item.shortUrl}
                                     </a></p>
-                                    <p><BsEye/> {item.visitCount}</p>
+                                    <p><BsEye /> {item.visitCount}</p>
                                 </div>
                                 <div className='info-text'>
                                     <span><a href={item.expirationDate}>{formatExpirationDate1(item.expirationDate)}</a></span>
