@@ -22,7 +22,6 @@ const UserView = () => {
 
             if (error === 'OK') {
                 setData(userUrls);
-                Notiflix.Notify.success('Successful login');
             } else if (error === 'INVALID_USER_NAME') {
                 Notiflix.Notify.failure('User name does not exist in the database');
             } else {
@@ -41,7 +40,7 @@ const UserView = () => {
 
             if (error === 'OK') {
                 window.open(originalUrl, '_blank');
-                Notiflix.Notify.success('Successful login');
+                Notiflix.Notify.success('Redirect OK');
             } else if (error === 'INVALID_SHORT_URL') {
                 Notiflix.Notify.failure('Invalid link');
             } else {
