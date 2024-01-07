@@ -187,16 +187,16 @@ const UserView = () => {
                                 />
                             </label>
                             <br />
-                            <label className='Form-label'>
-                                <p>
-                                    Description:
-                                </p>
-                                <input
-                                    type="text"
-                                    value={description}
-                                    onChange={(e) => setDescription(e.target.value)}
-                                />
-                            </label>
+                            {/*<label className='Form-label'>*/}
+                            {/*    <p>*/}
+                            {/*        Description:*/}
+                            {/*    </p>*/}
+                            {/*    <input*/}
+                            {/*        type="text"*/}
+                            {/*        value={description}*/}
+                            {/*        onChange={(e) => setDescription(e.target.value)}*/}
+                            {/*    />*/}
+                            {/*</label>*/}
                             <br />
                         </form>
                         <button type="button" onClick={handleConvert} className='button'>
@@ -224,6 +224,7 @@ const UserView = () => {
                             />
                             active urls
                         </label>
+                        <br />
                     </div>
                     <>
                         <div className='Info-title Form-label'>

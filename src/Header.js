@@ -27,13 +27,13 @@ const Header = () => {
                         </button>
                     </a>
                 </li>
-                <li>
-                    <a href="/viewAll">
-                        <button className='button'>
-                            View All
-                        </button>
-                    </a>
-                </li>
+                {/*<li>*/}
+                {/*    <a href="/viewAll">*/}
+                {/*        <button className='button'>*/}
+                {/*            View All*/}
+                {/*        </button>*/}
+                {/*    </a>*/}
+                {/*</li>*/}
             </ul>
         </div>
     )
