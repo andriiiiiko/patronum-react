@@ -23,13 +23,13 @@ const UserView = () => {
             if (error === 'OK') {
                 setData(userUrls);
             } else if (error === 'INVALID_USER_NAME') {
-                Notiflix.Notify.failure('User name does not exist in the database');
+                Notiflix.Notify.failure('User name does not exist in the database.');
             } else {
-                Notiflix.Notify.failure('Error fetching data');
+                Notiflix.Notify.failure('Error fetching data.');
             }
         } catch (error) {
             console.error('Unexpected error while fetching data', error);
-            Notiflix.Notify.failure('Unexpected error while fetching data');
+            Notiflix.Notify.failure('Unexpected error while fetching data.');
         }
     }, [selectedOption]);
 
@@ -39,18 +39,20 @@ const UserView = () => {
             const { error, originalUrl } = response.data;
 
             if (error === 'OK') {
-                window.location.href = originalUrl;
+                // window.location.href = originalUrl; //в текушей вкладке
+                window.open(originalUrl, '_blank', 'noopener noreferrer');// в новой вкладке
+
                 Notiflix.Notify.success('Redirect OK');
             } else if (error === 'INVALID_SHORT_URL') {
-                Notiflix.Notify.failure('Invalid link');
+                Notiflix.Notify.failure('Invalid link.');
             } else if (error === 'TIME_NOT_PASSED') {
-                Notiflix.Notify.failure('Link is not active');
+                Notiflix.Notify.failure('Link is not active.');
             } else {
-                Notiflix.Notify.failure('Error fetching redirect data');
+                Notiflix.Notify.failure('Error fetching redirect data.');
             }
         } catch (error) {
             console.error('Unexpected error while fetching redirect data', error);
-            Notiflix.Notify.failure('Unexpected error while fetching redirect data');
+            Notiflix.Notify.failure('Unexpected error while fetching redirect data.');
         }
     };
 
@@ -80,19 +82,19 @@ const UserView = () => {
             if (error === 'OK') {
                 setOriginalUrl('');
                 setDescription('');
+                await fetchData();
                 console.log('URL created successfully:', newUrl);
-                Notiflix.Notify.success('Successful creation');
+                Notiflix.Notify.success('Successful creation.');
             } else if (error === 'EMPTY_NEW_URL') {
-                Notiflix.Notify.failure('Empty link');
+                Notiflix.Notify.failure('Empty link.');
             } else if (error === 'INVALID_ORIGINAL_URL') {
-                Notiflix.Notify.failure('Original link is bad');
-                // ИСПРАВИТЬ ЄТО
+                Notiflix.Notify.failure('Link is not valid.');
             } else {
                 Notiflix.Notify.failure('Error creating URL');
             }
         } catch (error) {
             console.error('Unexpected error while creating URL', error);
-            Notiflix.Notify.failure('Unexpected error while creating URL');
+            Notiflix.Notify.failure('Unexpected error while creating URL.');
         }
     };
 
@@ -127,18 +129,18 @@ const UserView = () => {
 
             if (error === 'OK') {
                 console.log('URL deleted successfully');
-                Notiflix.Notify.success('Successful removal');
+                Notiflix.Notify.success('Successful removal.');
                 await fetchData();
             } else if (error === 'INVALID_ID') {
-                Notiflix.Notify.failure('Invalid ID');
+                Notiflix.Notify.failure('Invalid ID.');
             } else if (error === 'INVALID_ACCESS') {
-                Notiflix.Notify.failure('Access denied');
+                Notiflix.Notify.failure('Access denied.');
             } else {
-                Notiflix.Notify.failure('Error deleting URL');
+                Notiflix.Notify.failure('Error deleting URL.');
             }
         } catch (error) {
             console.error('Unexpected error while deleting URL', error);
-            Notiflix.Notify.failure('Unexpected error while deleting URL');
+            Notiflix.Notify.failure('Unexpected error while deleting URL.');
         }
     };
 
@@ -152,18 +154,18 @@ const UserView = () => {
 
             if (error === 'OK') {
                 console.log('URL time successfully');
-                Notiflix.Notify.success('The link is activated')
+                Notiflix.Notify.success('The link is activated.')
                 await fetchData();
             } else if (error === 'INVALID_SHORT_URL') {
-                Notiflix.Notify.failure('Invalid short url');
+                Notiflix.Notify.failure('Invalid short url.');
             } else if (error === 'TIME_NOT_PASSED') {
-                Notiflix.Notify.failure('Link has actived');
+                Notiflix.Notify.failure('Link has actived.');
             } else {
-                Notiflix.Notify.failure('Error time URL')
+                Notiflix.Notify.failure('Error time URL.')
             }
         } catch (error) {
             console.error('Unexpected error while time URL', error);
-            Notiflix.Notify.failure('Error time URL')
+            Notiflix.Notify.failure('Error time URL.')
         }
     };
 
@@ -234,7 +236,7 @@ const UserView = () => {
                         {data.map((item) => (
                             <div key={item.id} className='Info-all'>
                                 <div className='info-text'>
-                                    <p><a href={item.shortUrl} onClick={() => handleRedirectClick(item.shortUrl)}>
+                                    <p><a href={item.shortUrl} onClick={(e) => { e.preventDefault(); handleRedirectClick(item.shortUrl); }}>
                                         {item.shortUrl}
                                     </a></p>
                                     <p><BsEye /> {item.visitCount}</p>

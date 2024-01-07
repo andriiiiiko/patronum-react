@@ -5,7 +5,6 @@ import { BsEye } from "react-icons/bs";
 
 const ViewAllPage = () => {
     const [data, setData] = useState([]);
-    // const [error, setError] = useState('');
 
     const handleRedirectClick = async (shortUrl) => {
         try {
@@ -13,16 +12,14 @@ const ViewAllPage = () => {
             const { error, originalUrl } = response.data;
 
             if (error === 'OK') {
-                window.open(originalUrl, '_blank'); // Открыть новую вкладку с оригинальным URL
-                Notiflix.Notify.success('Успешный вход')
+                window.open(originalUrl, '_blank', 'noopener noreferrer');// в новой вкладке
+                // window.location.href = originalUrl; //в текушей вкладке
             } else {
-                // setError('Error fetching redirect data');
-                Notiflix.Notify.failure('Error fetching redirect data')
+                Notiflix.Notify.failure('Error fetching redirect data.')
             }
         } catch (error) {
             console.error('Unexpected error while fetching redirect data', error);
-            // setError('Unexpected error while fetching redirect data');
-            Notiflix.Notify.failure('Unexpected error while fetching redirect data')
+            Notiflix.Notify.failure('Unexpected error while fetching redirect data.')
         }
     };
 
@@ -49,13 +46,11 @@ const ViewAllPage = () => {
                 if (error === 'OK') {
                     setData(urls);
                 } else {
-                    // setError('Error fetching data');
-                    Notiflix.Notify.failure('Error fetching data')
+                    Notiflix.Notify.failure('Error fetching data.')
                 }
             } catch (error) {
                 console.error('Unexpected error while fetching data', error);
-                // setError('Unexpected error while fetching data');
-                Notiflix.Notify.failure('Unexpected error while fetching data')
+                Notiflix.Notify.failure('Unexpected error while fetching data.')
             }
         };
 
@@ -73,11 +68,14 @@ const ViewAllPage = () => {
                 <div key={item.id} className='Info-all'>
                     <div className='info-text'>
                         <p>
-                            <a href={item.originalUrl} onClick={() => handleRedirectClick(item.shortUrl)}>
+                            <a href={item.shortUrl} onClick={(e) => {
+                                e.preventDefault();
+                                handleRedirectClick(item.shortUrl);
+                            }}>
                                 {item.shortUrl}
                             </a>
                         </p>
-                        <p><BsEye /> {item.visitCount}</p>
+                        <p><BsEye/> {item.visitCount}</p>
                     </div>
                     <div className='info-text'>
                         <span><a href={item.expirationDate}>{formatExpirationDate(item.expirationDate)}</a></span>

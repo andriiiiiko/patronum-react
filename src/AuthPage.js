@@ -20,15 +20,18 @@ const AuthPage = () => {
 
             if (error === 'OK' && token) {
                 console.log('Успешный вход', token);
-                Notiflix.Notify.success('You have successfully logged in')
+                Notiflix.Notify.success('You have successfully logged in.')
                 localStorage.setItem('authToken', token);
                 navigate('/userview');
             } else if (error === 'INVALID_USER_NAME') {
-                Notiflix.Notify.failure('We could not find an account with that username')
+                Notiflix.Notify.failure('We could not find an account with that username.')
             } else if (error === 'NAME_IS_EMPTY') {
-                Notiflix.Notify.failure('Username cannot be blank')
+                Notiflix.Notify.failure('Username must be at least 4 characters long.')
             } else if (error === 'INVALID_PASSWORD') {
-                Notiflix.Notify.failure('Password must be at least 8 characters')
+                Notiflix.Notify.failure('Incorrect password.')
+            }
+            else if (error === 'INVALID_MAX_PASSWORD') {
+                Notiflix.Notify.failure('Incorrect length password.')
             }
         } catch (error) {
             console.error('Произошла неожиданная ошибка при авторизации', error.response?.data || error.message);
