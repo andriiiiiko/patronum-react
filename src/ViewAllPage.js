@@ -13,8 +13,8 @@ const ViewAllPage = () => {
             const { error, originalUrl } = response.data;
 
             if (error === 'OK') {
-                window.open(originalUrl, '_blank'); // Открыть новую вкладку с оригинальным URL
-                Notiflix.Notify.success('Успешный вход')
+                window.open(originalUrl, '_blank');
+                Notiflix.Notify.success('Successful login')
             } else {
                 // setError('Error fetching redirect data');
                 Notiflix.Notify.failure('Error fetching redirect data')
@@ -30,7 +30,7 @@ const ViewAllPage = () => {
         const dateObject = new Date(expirationDate);
 
         const day = String(dateObject.getDate()).padStart(2, '0');
-        const month = String(dateObject.getMonth() + 1).padStart(2, '0'); // Добавляем 1, так как месяцы начинаются с 0
+        const month = String(dateObject.getMonth() + 1).padStart(2, '0');
         const year = dateObject.getFullYear();
         const hours = String(dateObject.getHours()).padStart(2, '0');
         const minutes = String(dateObject.getMinutes()).padStart(2, '0');

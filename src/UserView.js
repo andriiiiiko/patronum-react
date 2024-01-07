@@ -100,7 +100,7 @@ const UserView = () => {
         const dateObject = new Date(expirationDate);
 
         const day = String(dateObject.getDate()).padStart(2, '0');
-        const month = String(dateObject.getMonth() + 1).padStart(2, '0'); // Добавляем 1, так как месяцы начинаются с 0
+        const month = String(dateObject.getMonth() + 1).padStart(2, '0');
         const year = dateObject.getFullYear();
         const hours = String(dateObject.getHours()).padStart(2, '0');
         const minutes = String(dateObject.getMinutes()).padStart(2, '0');
@@ -157,7 +157,7 @@ const UserView = () => {
             } else if (error === 'INVALID_SHORT_URL') {
                 Notiflix.Notify.failure('Invalid short url');
             } else if (error === 'TIME_NOT_PASSED') {
-                Notiflix.Notify.failure('Link has actived');
+                Notiflix.Notify.failure('Link has activated');
             } else {
                 Notiflix.Notify.failure('Error time URL')
             }

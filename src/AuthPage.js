@@ -19,7 +19,7 @@ const AuthPage = () => {
             const { error, token } = response.data;
 
             if (error === 'OK' && token) {
-                console.log('Успешный вход', token);
+                console.log('Successful login', token);
                 Notiflix.Notify.success('You have successfully logged in')
                 localStorage.setItem('authToken', token);
                 navigate('/userview');
@@ -31,7 +31,7 @@ const AuthPage = () => {
                 Notiflix.Notify.failure('Password must be at least 8 characters')
             }
         } catch (error) {
-            console.error('Произошла неожиданная ошибка при авторизации', error.response?.data || error.message);
+            console.error('An unexpected error occurred during authorization', error.response?.data || error.message);
             Notiflix.Notify.failure('An unexpected error has occurred')
         }
     };

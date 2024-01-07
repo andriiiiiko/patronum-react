@@ -20,7 +20,7 @@ const RegistrationPage = () => {
             const { error } = response.data;
 
             if (error === 'OK') {
-                console.log('Успешная регистрация');
+                console.log('Successful registration');
                 Notiflix.Notify.success('You have been successfully registered')
                 navigate('/login');
             } else if (error === 'USER_ALREADY_EXISTS') {
@@ -32,11 +32,11 @@ const RegistrationPage = () => {
             } else if (error === 'INVALID_CONFIRM_PASSWORD') {
                 Notiflix.Notify.failure('Password and Confirm password does not match')
             } else {
-                console.error('Ошибка регистрации:', error);
+                console.error('Registration error:', error);
                 Notiflix.Notify.failure('Something went wrong. Please try again')
             }
         } catch (error) {
-            console.error('Произошла неожиданная ошибка при регистрации', error.response?.data || error.message);
+            console.error('An unexpected error occurred during registration', error.response?.data || error.message);
             Notiflix.Notify.failure('An unexpected error occurred')
         }
     };
