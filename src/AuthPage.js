@@ -6,8 +6,12 @@ import { Link, useNavigate } from 'react-router-dom';
 const AuthPage = () => {
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
+    const [showPassword, setShowPassword] = useState(false);
 
     const navigate = useNavigate();
+    const toggleShowPassword = () => {
+        setShowPassword(!showPassword);
+    };
 
     const handleLogin = async () => {
         try {
@@ -54,18 +58,28 @@ const AuthPage = () => {
                         onChange={(e) => setUsername(e.target.value)}
                     />
                 </label>
-                <br />
+                <br/>
                 <label className='Form-label'>
                     <p>
                         Password:
                     </p>
+
                     <input
-                        type="password"
+                        type={showPassword ? 'text' : 'password'}
                         value={password}
                         onChange={(e) => setPassword(e.target.value)}
                     />
                 </label>
-                <br />
+            <br/>
+                <label>
+                    <input
+                        type="checkbox"
+                        checked={showPassword}
+                        onChange={toggleShowPassword}
+                    />
+                    Show password
+                </label>
+                <br/>
                 <button type="button" onClick={handleLogin} className='button'>
                     Login
                 </button>
