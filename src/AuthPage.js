@@ -6,8 +6,12 @@ import { Link, useNavigate } from 'react-router-dom';
 const AuthPage = () => {
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
+    const [showPassword, setShowPassword] = useState(false);
 
     const navigate = useNavigate();
+    const toggleShowPassword = () => {
+        setShowPassword(!showPassword);
+    };
 
     const handleLogin = async () => {
         try {
@@ -19,7 +23,7 @@ const AuthPage = () => {
             const { error, token } = response.data;
 
             if (error === 'OK' && token) {
-                console.log('Успешный вход', token);
+                console.log('Successful login', token);
                 Notiflix.Notify.success('You have successfully logged in.')
                 localStorage.setItem('authToken', token);
                 navigate('/userview');
@@ -34,47 +38,47 @@ const AuthPage = () => {
                 Notiflix.Notify.failure('Incorrect length password.')
             }
         } catch (error) {
-            console.error('Произошла неожиданная ошибка при авторизации', error.response?.data || error.message);
+            console.error('An unexpected error occurred during authorization', error.response?.data || error.message);
             Notiflix.Notify.failure('An unexpected error has occurred')
         }
     };
 
-
     return (
-        <div className='App-container'>
-            <h1 className='Auth-title'>Login</h1>
-            <form className='Form'>
-                <label className='Form-label'>
-                    <p>
-                        Username:
-                    </p>
-                    <input
-                        type="text"
-                        value={username}
-                        onChange={(e) => setUsername(e.target.value)}
-                    />
-                </label>
-                <br />
-                <label className='Form-label'>
-                    <p>
-                        Password:
-                    </p>
-                    <input
-                        type="password"
-                        value={password}
-                        onChange={(e) => setPassword(e.target.value)}
-                    />
-                </label>
-                <br />
-                <button type="button" onClick={handleLogin} className='button'>
-                    Login
-                </button>
-            </form>
-            <p className='Auth-text'>
-                Don't have an account? <Link to="/register">Sign up</Link>.
-            </p>
-        </div>
-    );
+    <div className='App-container'>
+      <h1 className='Auth-title'>Login</h1>
+      <form className='Form'>
+        <label className='Form-label'>
+          <p>Username:</p>
+          <input
+            type="text"
+            value={username}
+            onChange={(e) => setUsername(e.target.value)}
+          />
+        </label>
+        <br />
+        <label className='Form-label'>
+          <p>Password:</p>
+          <div className="PasswordInput">
+            <input
+              type={showPassword ? 'text' : 'password'}
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+            />
+            <span className="ShowPasswordCheckbox" onClick={toggleShowPassword}>
+              {showPassword ? '🙈' : '👁️'}
+            </span>
+          </div>
+        </label>
+        <br />
+        <button type="button" onClick={handleLogin} className='button'>
+          Login
+        </button>
+      </form>
+      <p className='Auth-text'>
+        Don't have an account? <Link to="/register">Sign up</Link>.
+      </p>
+    </div>
+  );
 };
 
 export default AuthPage;
